@@ -22,10 +22,10 @@ const getDaysInMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 
 const createArray = (length) => {
     const result = []
 
-    for (0, i, length) {
-        result
+    for (let i = 0; i < createArray.length; i++ ){
+        console.log(createArray[i]);
     }
-}
+}//only used old for loop because of error "Uncaught SyntaxError: Invalid left-hand side in for-loop"
 
 const createData = () => {
     const current = new Date
