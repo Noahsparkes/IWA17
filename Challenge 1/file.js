@@ -22,39 +22,59 @@ const getDaysInMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 
 const createArray = (length) => {
     const result = []
 
-    for (let i = 0; i < createArray.length; i++ ){
-        console.log(createArray[i]);
+    for (let i = 0; i < length; i++ ){
+        result.push(i); // returns array with numbers from 0 to lenght-1
     }
+    return result;
 }//only used old for loop because of error "Uncaught SyntaxError: Invalid left-hand side in for-loop"
+/*for (name.length of createArray){
+    console.log(result);
+}*/ 
+
+getDaysInMonth = (date) => {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  return new Date(year, month, 0).getDate();
+};
 
 const createData = () => {
-    const current = new Date
-    current.setDate(1)
+    const current = new Date();
+    current.setDate(1);
 
-    startDay = current.day
-    daysInMonth = getDaysInMonth(current)
+    const startDay = current.getDay();
+    const daysInMonth = getDaysInMonth(current);
 
-    weeks = createArray(5)
-    days = createArray(7)
-    value = null
+    const weeks = createArray(5);
+    const days = createArray(7);
+    let value = null;
 
-    for (weekIndex in weeks) {
-        value = [{
-            week: weekIndex + 1,
+    for (let weekIndex in weeks) {
+        value = {
+            week: parseInt(weekIndex) + 1,
             days: []
-        }]
+        };
 
-        for (dayIndex in days) {
-            value = dayIndex - startDay
-            isValid = day > 0 && day <= daysInMonth
+        for (let dayIndex in days) {
+            const day = parseInt(dayIndex) - startDay + 1;
+            const isValid = day > 0 && day <= daysInMonth;
 
-            result[weekIndex].days = [{
-                dayOfWeek: dayIndex + 1,
-                value: isValid && day,
-            }]
+            value.days.push({
+                dayOfWeek: parseInt(dayIndex) + 1,
+                value: isValid ? day : null,
+            });
         }
+
+        weeks[weekIndex] = value;
     }
+
+    return weeks;
 }
+/*above code snippet creates an array of 5 objects, each reprisenting a week and containing 
+an array of 7 objects, each representing a day with its day of the week and day of the month.*/ 
+
+
+
+
 
 const addCell = (existing, classString, value) => {
     const result = /* html */ `
@@ -65,6 +85,14 @@ const addCell = (existing, classString, value) => {
         ${existing}
     `
 }
+
+
+
+
+
+
+
+
 
 const createHtml = (data) => {
     let result = ''
@@ -90,6 +118,9 @@ const createHtml = (data) => {
         result = `<tr>${inner}</tr>`
     }
 }
+
+
+
 
 // Only edit above
 
