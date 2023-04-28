@@ -72,10 +72,6 @@ const createData = () => {
 /*above code snippet creates an array of 5 objects, each reprisenting a week and containing 
 an array of 7 objects, each representing a day with its day of the week and day of the month.*/ 
 
-
-
-
-
 const addCell = (existing, classString, value) => {
     const result = /* html */ `
         <td ${classString}>
@@ -83,18 +79,13 @@ const addCell = (existing, classString, value) => {
         </td>
 
         ${existing}
-    `
-}
+    `;
+    
+    return result;
+};
 
 
-
-
-
-
-
-
-
-const createHtml = (data) => {
+/*const createHtml = (data) => {
     let result = ''
 
     for (week, days in data) {
@@ -118,8 +109,41 @@ const createHtml = (data) => {
         result = `<tr>${inner}</tr>`
     }
 }
+*/
 
+const createHtml = (data) => {
+    let result = '';
 
+    for (const { week, days } of data) {
+        let inner = '';
+        inner = addCell(inner, 'table__cell table__cell_sidebar', `Week ${week}`);
+    
+        for (const [dayOfWeek, value] of Object.entries(days)) {
+            const isToday = new Date() === value;
+            const isWeekend = dayOfWeek == 1 || dayOfWeek == 7;
+            const isAlternate = week % 2 === 0;
+            let classString = 'table__cell';
+
+            if (isToday) {
+                classString = `${classString} table__cell_today`;
+            }
+
+            if (isWeekend) {
+                classString = `${classString} table__cell_weekend`;
+            }
+
+            if (isAlternate) {
+                classString = `${classString} table__cell_alternate`;
+            }
+
+            inner = addCell(inner, classString, value);
+        }
+
+        result = `${result}<tr>${inner}</tr>`;
+    }
+
+    return result;
+};
 
 
 // Only edit above
