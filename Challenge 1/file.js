@@ -73,20 +73,15 @@ const createData = () => {
 
     return weeks;
 }
-
-
 //The purpose of this function(addCell) is to add a new HTML table cell (<td>) to an existing table row.
 const addCell = (existing, classString, value) => {
-    const result = /* html */ `
-        <td ${classString}>
+    return /* html */ `
+        <td class="${classString}">
             ${value}
         </td>
-
         ${existing}
-    `;
-    
-    return result;
-};
+    `
+}
 
 
 /*const createHtml = (data) => {
@@ -112,8 +107,8 @@ const addCell = (existing, classString, value) => {
 
         result = `<tr>${inner}</tr>`
     }
-}
-*/
+}*/
+
 
 // Takes in an array of data representing weeks and days
 const createHtml = (data) => {
@@ -146,6 +141,13 @@ const createHtml = (data) => {
     // Return the completed HTML table
     return result;
 };
+
+//define the monthYear header and fetch the element id from html
+const monthYearHeader = document.querySelector('[data-title]');
+// Set the header to display current month and year
+monthYearHeader.innerHTML = `${MONTHS[currentMonth]} ${currentYear}`;
+
+
 
 
 // Only edit above
