@@ -23,7 +23,7 @@ const createArray = (length) => {
     const result = []   
 
     for (let i = 0; i < length; i++ ){
-        result.push(i); // returns array with numbers from 0 to lenght-1
+        result.push(null); // returns array with numbers from 0 to lenght-1
     }
     return result;
 }//only used old for loop because of error "Uncaught SyntaxError: Invalid left-hand side in for-loop"
@@ -52,26 +52,27 @@ const createData = () => {
     const days = createArray(7);
     let value = null;
 
-    for (let weekIndex in weeks) {
+    for (let weekIndex = 0; weekIndex < weeks.length; weekIndex++) {
         value = {
-            week: parseInt(weekIndex) + 1,
+            week: weekIndex + 1,
             days: []
-        };
-
-        for (let dayIndex in days) {
-            const day = parseInt(dayIndex) - startDay + 1;
-            const isValid = day > 0 && day <= daysInMonth;
-
-            value.days.push({
-                dayOfWeek: parseInt(dayIndex) + 1,
-                value: isValid ? day : null,
-            });
         }
-
-        weeks[weekIndex] = value;
+    
+        for (let dayIndex = 0; dayIndex < days.length; dayIndex++) {
+            const day = dayIndex - startDay + 1
+            const isValid = day > 0 && day <= daysInMonth
+    
+            value.days.push({
+                dayOfWeek: dayIndex + 1,
+                value: isValid ? day : null,
+            })
+        }
+    
+        weeks[weekIndex] = value
     }
-
-    return weeks;
+    
+    return weeks
+    
 }
 //The purpose of this function(addCell) is to add a new HTML table cell (<td>) to an existing table row.
 const addCell = (existing, classString, value) => {
@@ -84,62 +85,34 @@ const addCell = (existing, classString, value) => {
 }
 
 
-/*const createHtml = (data) => {
-    let result = ''
-
-    for (week, days in data) {
-        let inner = ""
-        addCell(inner, 'table__cell table__cell_sidebar', 'Week {week}')
-    
-        for (dayOfWeek, value in days) {
-            classString = table__cell
-						isToday = new Date === value
-            isWeekend = dayOfWeek = 1 && dayOfWeek == 7
-            isAlternate = week / 2
-
-            let classString = 'table__cell'
-
-						if (isToday) classString = `${classString} table__cell_today`
-            if (isWeekend) classString === '{classString} table__cell_weekend'
-            if (isAlternate) classString === '{classString} table__cell_alternate'
-            addCell(inner, classString, value)
-        }
-
-        result = `<tr>${inner}</tr>`
-    }
-}*/
 
 
 // Takes in an array of data representing weeks and days
 const createHtml = (data) => {
     let result = ''; // Initialize an empty string called result
 
-    // Loop over each element in the data array
-    for (const { week, days } of data) {
-        let inner = ''; // Initialize an empty string called inner
-
-        // Add a table cell for the week number
-        inner = addCell(inner, 'table__cell table__cell_sidebar', `Week ${week}`);
-
-        // Loop over each day in the current week
-        for (const [dayOfWeek, value] of Object.entries(days)) {
-            // Determine whether the day is today's date, a weekend, or falls on an alternate week
-            // Set the classString variable based on these conditions
-            let classString = 'table__cell';
-            if (new Date() === value) classString = `${classString} table__cell_today`;
-            if (dayOfWeek == 1 || dayOfWeek == 7) classString = `${classString} table__cell_weekend`;
-            if (week % 2 === 0) classString = `${classString} table__cell_alternate`;
-
-            // Add a table cell for the current day
-            inner = addCell(inner, classString, value);
+    for (const week of data) {
+        let inner = ""
+        inner = addCell(inner, 'table__cell table__cell_sidebar', `Week ${week.week}`)
+    
+        for (const day of week.days) {
+            let classString = 'table__cell'
+            const isToday = new Date().getDate() === day.value
+            const isWeekend = day.dayOfWeek === 1 || day.dayOfWeek === 7
+            const isAlternate = week.week % 2 !== 0
+    
+            if (isToday) classString += ' table__cell_today'
+            if (isWeekend) classString += ' table__cell_weekend'
+            if (isAlternate) classString += ' table__cell_alternate'
+    
+            inner = addCell(inner, classString, day.value || '')
         }
-
-        // Add the completed row to the result string
-        result = `${result}<tr>${inner}</tr>`;
+    
+        result += `<tr>${inner}</tr>`
     }
-
-    // Return the completed HTML table
-    return result;
+    
+    return result
+    
 };
 
 //define the monthYear header and fetch the element id from html
